@@ -1,4 +1,5 @@
-torch
-transformers
-Flask
+torch~=1.8.1
+transformers~=4.5.1
+Flask~=1.1.2
 waitress
+GoogleNews~=1.5.7
