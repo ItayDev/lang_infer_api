@@ -14,7 +14,7 @@ class LangInferModel(nn.Module):
         self.span_info_extract = SpanInformationExtract(hidden_size, span_attention_heads)
         self.output = nn.Linear(hidden_size * (span_attention_heads + 1), NUM_OF_LABELS)
 
-    def forward(self, input_ids, start_indexs, end_indexs):
+    def forward(self, input_ids, start_indexs, end_indexs, span_masks):
         # generate mask
         attention_mask = (input_ids != 1).long()
         # intermediate layer
@@ -23,7 +23,7 @@ class LangInferModel(nn.Module):
         hidden_states = res.last_hidden_state
         # span info collecting layer(SIC)
         h_ij = self.span_info_collect(hidden_states, start_indexs, end_indexs)
-        H = self.span_info_extract(h_ij)
+        H = self.span_info_extract(h_ij, span_masks)
 
         # use both Roberta's first token for classification as well as span attention heads
         H = torch.cat([classification_hidden_state, H], dim=1)
@@ -70,7 +70,6 @@ class SICModel(nn.Module):
         expanse[1] = -1
         indexes = indexes.view(views).expand(expanse)
         return torch.gather(hidden_states, 1, indexes)
-        # return torch.stack([torch.index_select(hidden_states[i], 0, indexes[i]) for i in range(len(hidden_states))]) - my old probably inefficient implementation
 
 
 class SpanInformationExtract(nn.Module):
@@ -78,8 +77,10 @@ class SpanInformationExtract(nn.Module):
         super().__init__()
         self.span_weight_extraction = nn.Linear(hidden_size, span_attention_heads)
 
-    def forward(self, h_ij):
+    def forward(self, h_ij, span_masks):
         span_attention_weights = self.span_weight_extraction(h_ij)
+        # Mask padding spans
+        span_attention_weights = span_attention_weights - span_masks.unsqueeze(-1)
         span_attention_weights = nn.functional.softmax(span_attention_weights, dim=1)
 
         # Calculating the weighted avarage for each head in one go - using torch.bmm
