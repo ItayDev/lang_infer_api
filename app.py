@@ -4,6 +4,7 @@ import API
 from Models.Hypothesis.predict import HypothesisModel
 
 app = Flask(__name__)
+CORS(app)
 
 
 # This route returns a probability for a given hypothesis to be inferred by a given premise.
@@ -21,7 +22,8 @@ app = Flask(__name__)
 @app.route('/hypothesisModel', methods=["POST"])
 def run_hypothesis_model():
     body = request.get_json()
-    return API.run_hypothesis_model(body)
+    prediction = model.predict(body['premise'], body['hypothesis'])
+    return {"prediction": prediction}
 
 
 # This route returns a probability for a given text to be true according to detection of lying patterns.
@@ -37,6 +39,18 @@ def run_hypothesis_model():
 def run_pattern_model():
     body = request.get_json()
     return API.run_pattern_model(body)
+
+
+# Sample Model for getting prediction from news
+@app.route('/', methods=["POST"])
+def hello():
+    body = request.get_json()
+    print(body)
+    prediction = randrange(100) # TODO get prediction from getNews
+    print(getNews(body['news']))
+    #model.predict(body['premise'], body['hypothesis'])
+    return  {"prediction": prediction}
+
 
 if __name__ == "__main__":
     app.run()

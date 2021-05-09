@@ -8,4 +8,6 @@ transformers
 # Http Server
 Flask
 waitress
-MyApplication
+
+# News API
+GoogleNews~=1.5.7
