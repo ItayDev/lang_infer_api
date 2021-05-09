@@ -4,7 +4,7 @@ from Models.Pattern import Parameters, SaveLoad
 from os.path import join, dirname, abspath
 
 modules_location = join(dirname(abspath(__file__)), "Models", "SavedModels")
-hypothesis_model_location = join(modules_location, "hypothesisModel")
+hypothesis_model_location = join(modules_location, "hypothesisModel.pt")
 pattern_model_location = join(modules_location, "patternModel.pt")
 
 
