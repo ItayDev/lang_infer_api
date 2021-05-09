@@ -1,4 +1,5 @@
 import ModelLoader
+from Data import newsController
 from Models.Pattern import Parameters, DatasetPrepare
 
 hypothesis_model = ModelLoader.load_hypothesis_model()
@@ -20,4 +21,9 @@ def run_pattern_model(body):
     prediction_tensor = pattern_model(tokenized_titles)
     prediction_of_true_label = [pred_tensor[Parameters.TRUE_LABEL_INDEX] for pred_tensor in prediction_tensor.squeeze().tolist()]
     return {"predictions": prediction_of_true_label}
+
+
+# Retrieve news from news api
+def fetchNews(hypothesis):
+    return newsController.getNews(hypothesis)
 

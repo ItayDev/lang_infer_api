@@ -1,6 +1,4 @@
-import array
 import requests
-from model.predict import Model
 
 
 def getNews(hypothesis):

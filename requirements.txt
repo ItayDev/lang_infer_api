@@ -9,5 +9,9 @@ transformers
 Flask
 waitress
 
+# Http Client
+requests
+
 # News API
 GoogleNews~=1.5.7
+MyApplication
