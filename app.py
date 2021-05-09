@@ -1,13 +1,42 @@
-from flask import Flask, request, jsonify, json
-from model.predict import Model
+from flask import Flask, request
+
+import API
+from Models.Hypothesis.predict import HypothesisModel
 
 app = Flask(__name__)
 
-model = Model("saved_models/1042176_snli-0.8-0.747_mnli_matched-0.65-0.891_mnli_mismatched-0.655-0.888")
 
-
-@app.route('/', methods=["POST"])
-def hello():
+# This route returns a probability for a given hypothesis to be inferred by a given premise.
+# payload should be a list of a dictionary as follows:
+# [
+#   {
+#       "premise":"Today is Monday",
+#       "hypothesis":"Tomorrow will be Tuesday"
+#   },
+#   {
+#       "premise": "Our grade is 100",
+#       "hypothesis":"Sure barur"
+#   }
+# ]
+@app.route('/hypothesisModel', methods=["POST"])
+def run_hypothesis_model():
     body = request.get_json()
-    prediction = model.predict(body)
-    return {"predictions": prediction}
+    return API.run_hypothesis_model(body)
+
+
+# This route returns a probability for a given text to be true according to detection of lying patterns.
+# payload should be a list of a titles as follows:
+# {
+#   "titles":
+#   [
+#       "Today is Monday",
+#       "Sure Barur"
+#   ]
+# }
+@app.route('/patternModel', methods=["POST"])
+def run_pattern_model():
+    body = request.get_json()
+    return API.run_pattern_model(body)
+
+if __name__ == "__main__":
+    app.run()

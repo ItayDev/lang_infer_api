@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from math import sqrt, ceil
 from transformers import RobertaTokenizer, RobertaConfig, RobertaModel
-from model.implementation import LangInferModel
+from Models.Hypothesis.implementation import LangInferModel
 
 ENTAILMENT = 0
 NEUTRAL = 1
@@ -33,7 +33,7 @@ def calculate_prediction(model_result):
         return 0.5 + (1 / 3) * entailment_percentage - (1 / 3) * contradiction_percentage
 
 
-class Model:
+class HypothesisModel:
     def __init__(self, model_path, span_drop=0.6, max_spans=1000):
         self.tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
         self.model = load_model(model_path)

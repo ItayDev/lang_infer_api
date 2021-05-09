@@ -1,4 +1,11 @@
+# PyTorch
 torch
+torchtext
+
+# Models
 transformers
+
+# Http Server
 Flask
 waitress
+MyApplication
