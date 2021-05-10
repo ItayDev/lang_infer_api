@@ -1,9 +1,5 @@
-from random import randrange
-
 from flask import Flask, request
-
 import API
-from Data.newsController import getNews
 
 app = Flask(__name__)
 
@@ -23,8 +19,7 @@ app = Flask(__name__)
 @app.route('/hypothesisModel', methods=["POST"])
 def run_hypothesis_model():
     body = request.get_json()
-    prediction = model.predict(body['premise'], body['hypothesis'])
-    return {"prediction": prediction}
+    return API.run_hypothesis_model(body)
 
 
 # This route returns a probability for a given text to be true according to detection of lying patterns.
