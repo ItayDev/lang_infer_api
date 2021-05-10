@@ -9,7 +9,7 @@ tokenizer = BertTokenizer.from_pretrained(Parameters.BERT_TOKENIZER_NAME)
 
 def encode_bert(human_text):
     encoding = tokenizer._batch_encode_plus(human_text,
-                                     add_special_tokens=True,.
+                                     add_special_tokens=True,
                                      padding_strategy=PaddingStrategy.LONGEST,
                                      return_attention_mask=True,
                                      return_tensors="pt")
