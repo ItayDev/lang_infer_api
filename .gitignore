@@ -1,3 +1,6 @@
 venv
 saved_models
 .idea
+*.pyc
+*.pt
+__pycache__
