@@ -17,4 +17,4 @@ def getNews(hypothesis):
         # perdict // TODO average the prediction and send a percentage
 
     percentage = 0
-    return percentage
+    return str(percentage)
