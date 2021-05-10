@@ -17,10 +17,17 @@ The default thresholds are configured above.
 :return a list that has only definite probabilities of either true or false
 """
 def filter_significant_results(results_with_probs,
-                               min_true_threshold=MIN_TRUE_THRESHOLD,
-                               max_false_threshold=MAX_FALSE_THRESHOLD):
+                               lower_threshold=MIN_TRUE_THRESHOLD,
+                               upper_threshold=MAX_FALSE_THRESHOLD):
+    filter_unwanted_items =  \
+        filter(lambda item: filter_result(item, lower_threshold, upper_threshold), results_with_probs)
 
-    return []
+    return list(filter_unwanted_items)
+
+
+def filter_result(result, min_true_threshold, max_false_threshold):
+    probability = result[1]
+    return (probability >= min_true_threshold) or (probability <= max_false_threshold)
 
 
 
