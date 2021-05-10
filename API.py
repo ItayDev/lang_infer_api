@@ -1,6 +1,6 @@
 import ModelLoader
 from Data import newsController
-from Models.Pattern import Parameters, DatasetPrepare
+from Models.Pattern import Parameters, DatasetPrepare, SignificantResultsFilter
 
 hypothesis_model = ModelLoader.load_hypothesis_model()
 pattern_model = ModelLoader.load_pattern_model()
@@ -23,7 +23,13 @@ def run_pattern_model(body):
     return {"predictions": prediction_of_true_label}
 
 
+def pattern_model_filter(body):
+    texts = body['titles']
+    probabilities = run_pattern_model(body)["predictions"]
+    return {"predictions": SignificantResultsFilter.filter_significant_results(zip(texts, probabilities))}
+
+
 # Retrieve news from news api
-def fetchNews(hypothesis):
+def fetch_news(hypothesis):
     return newsController.getNews(hypothesis)
 

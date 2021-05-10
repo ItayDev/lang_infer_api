@@ -38,10 +38,16 @@ def run_pattern_model():
 
 
 # Sample Model for getting prediction from news
-@app.route('/', methods=["POST"])
-def hello():
+@app.route('/fetchNews', methods=["POST"])
+def fetch_news():
+    query = request.get_json()["query"]
+    return API.fetch_news(query)
+
+
+@app.route('/filterResults', methods=["POST"])
+def pattern_model_filter():
     body = request.get_json()
-    return API.fetchNews(body)
+    return API.pattern_model_filter(body)
 
 
 if __name__ == "__main__":
