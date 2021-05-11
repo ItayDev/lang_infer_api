@@ -3,7 +3,6 @@ from torch import nn
 from math import sqrt, ceil
 from transformers import RobertaTokenizer, RobertaConfig, RobertaModel
 from models.inference.implementation import LangInferModel
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 ENTAILMENT = 0
 NEUTRAL = 1
