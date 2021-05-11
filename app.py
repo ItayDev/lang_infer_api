@@ -4,22 +4,18 @@ import API
 app = Flask(__name__)
 
 
-# This route returns a probability for a given hypothesis to be inferred by a given premise.
-# payload should be a list of a dictionary as follows:
-# [
-#   {
-#       "premise":"Today is Monday",
-#       "hypothesis":"Tomorrow will be Tuesday"
-#   },
-#   {
-#       "premise": "Our grade is 100",
-#       "hypothesis":"Sure barur"
-#   }
-# ]
-@app.route('/hypothesisModel', methods=["POST"])
+# This route returns a score of tweets' reliability for a tweeter account.
+# payload should contain tweeter account name as well as range of tweets (up to two months):
+# {
+#   "accountName": "BlufferDude",
+#   "startDate": "2021-03-12"
+#   "endDate": "2021-03-31"
+# }
+@app.route('/classify', methods=["POST"])
 def run_hypothesis_model():
     body = request.get_json()
-    return API.run_hypothesis_model(body)
+    tweets = None                           # TODO get the tweets, call API.evaluate_tweets_with_news only after being
+    return API.evaluate_tweets_with_news()  # evaluated by the pattern model and filtered
 
 
 # This route returns a probability for a given text to be true according to detection of lying patterns.

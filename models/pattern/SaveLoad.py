@@ -1,6 +1,6 @@
 import torch
-import Models.Pattern.Parameters
-from Models.Pattern import Parameters
+import models.pattern.Parameters
+from models.pattern import Parameters
 
 
 # Save and Load Functions

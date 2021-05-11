@@ -1,6 +1,6 @@
 import torch
 
-# Data parameters:
+# data parameters:
 MODEL_FILE_NAME = "model.pt"
 
 # Model Parameters:

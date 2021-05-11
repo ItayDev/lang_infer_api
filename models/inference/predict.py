@@ -2,11 +2,13 @@ import torch
 from torch import nn
 from math import sqrt, ceil
 from transformers import RobertaTokenizer, RobertaConfig, RobertaModel
-from Models.Hypothesis.implementation import LangInferModel
+from models.inference.implementation import LangInferModel
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 ENTAILMENT = 0
 NEUTRAL = 1
 CONTRADICTION = 2
+
 
 def load_model(model_path):
     config = RobertaConfig.from_pretrained("roberta-base")
@@ -33,7 +35,7 @@ def calculate_prediction(model_result):
         return 0.5 + (1 / 3) * entailment_percentage - (1 / 3) * contradiction_percentage
 
 
-class HypothesisModel:
+class LangInferModelWrapper:
     def __init__(self, model_path, span_drop=0.6, max_spans=1000):
         self.tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
         self.model = load_model(model_path)
@@ -42,6 +44,7 @@ class HypothesisModel:
 
     def predict(self, batch):
         encoded_data, start_indexes, end_indexes, span_masks = self.__encode_input(batch)
+        # res = self.model(encoded_data, start_indexes, end_indexes, span_masks)
         res = self.model(encoded_data, start_indexes, end_indexes, span_masks)
         return list(map(lambda single_result: calculate_prediction(single_result).item(), res))
 
