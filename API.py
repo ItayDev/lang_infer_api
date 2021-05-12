@@ -5,7 +5,7 @@ from models.inference.TweetsEvaluator import TweetsEvaluator
 from datetime import datetime
 
 inference_model = ModelLoader.load_inference_model()
-pattern_model = None # ModelLoader.load_pattern_model()
+pattern_model = ModelLoader.load_pattern_model()
 news_requester = NewsRequester()
 tweets_evaluator = TweetsEvaluator(inference_model, news_requester)
 
