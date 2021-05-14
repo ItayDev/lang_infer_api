@@ -1,18 +1,15 @@
 import ModelLoader
-from Data import newsController
-from Models.Pattern import Parameters, DatasetPrepare, SignificantResultsFilter
+from data.NewsRequester import NewsRequester
+from models.pattern import Parameters, DatasetPrepare, SignificantResultsFilter
+from models.inference.TweetsEvaluator import TweetsEvaluator
+from datetime import datetime
 
-hypothesis_model = ModelLoader.load_hypothesis_model()
+inference_model = ModelLoader.load_inference_model()
 pattern_model = ModelLoader.load_pattern_model()
+news_requester = NewsRequester()
+tweets_evaluator = TweetsEvaluator(inference_model, news_requester)
 
-
-# Run the hypothesis model over pairs of hypothesis and premise,
-# and return the probability of each of each hypothesis to be inferred from premise
-def run_hypothesis_model(body):
-    prediction = hypothesis_model.predict(body)
-    return {"predictions": prediction}
-
-
+# TODO: This method should get as an input tweets and not the body directly
 # Run the pattern model over the given list of titles,
 # and return the probability for truth per each title
 def run_pattern_model(body):
@@ -23,6 +20,8 @@ def run_pattern_model(body):
     return {"predictions": prediction_of_true_label}
 
 
+# TODO: This method should get as an input tweets and not the body directly.
+#  it should filter those tweets and return them
 def pattern_model_filter(body):
     texts = body['titles']
     probabilities = run_pattern_model(body)["predictions"]
@@ -30,6 +29,7 @@ def pattern_model_filter(body):
 
 
 # Retrieve news from news api
-def fetch_news(hypothesis):
-    return newsController.getNews(hypothesis)
+def evaluate_tweets_with_news(tweets):
+    return tweets_evaluator.eval_tweets(tweets)
+
 

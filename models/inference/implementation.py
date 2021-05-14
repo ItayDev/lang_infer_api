@@ -1,8 +1,8 @@
 import torch
 from torch import nn
-from torch import optim
 
 NUM_OF_LABELS = 3
+
 
 class LangInferModel(nn.Module):
     def __init__(self, transformer_base, transformer_config, span_attention_heads):

@@ -2,7 +2,7 @@ from transformers import BertTokenizer
 from transformers.tokenization_utils_base import PaddingStrategy
 
 # Use BERT tokenizer (the method to use words the same way they are used in BERT model)
-from Models.Pattern import Parameters
+from models.pattern import Parameters
 
 tokenizer = BertTokenizer.from_pretrained(Parameters.BERT_TOKENIZER_NAME)
 

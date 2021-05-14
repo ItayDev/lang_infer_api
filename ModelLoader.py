@@ -1,15 +1,15 @@
-from Models.Hypothesis.predict import HypothesisModel
-from Models.Pattern.PatternModel import PatternModel
-from Models.Pattern import Parameters, SaveLoad
+from models.inference.predict import LangInferModelWrapper
+from models.pattern.PatternModel import PatternModel
+from models.pattern import Parameters, SaveLoad
 from os.path import join, dirname, abspath
 
-modules_location = join(dirname(abspath(__file__)), "Models", "SavedModels")
-hypothesis_model_location = join(modules_location, "hypothesisModel.pt")
+modules_location = join(dirname(abspath(__file__)), "models", "saved_models")
+inference_model_location = join(modules_location, "inference_model.pt")
 pattern_model_location = join(modules_location, "patternModel.pt")
 
 
-def load_hypothesis_model():
-    model = HypothesisModel(hypothesis_model_location)
+def load_inference_model():
+    model = LangInferModelWrapper(inference_model_location)
     return model
 
 

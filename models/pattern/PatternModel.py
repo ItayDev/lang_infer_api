@@ -1,7 +1,7 @@
 from transformers import BertForSequenceClassification
 import torch
 import torch.nn as nn
-from Models.Pattern import Parameters
+from models.pattern import Parameters
 
 
 class PatternModel(nn.Module):
