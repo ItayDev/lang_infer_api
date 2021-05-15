@@ -48,7 +48,7 @@ def pattern_model_filter():
 
 @app.route('/tweets/<person>', methods=["GET"])
 def get_tweets(person):
-    return API.retrieve_tweets(person)
+    return {"tweets": API.retrieve_tweets(person)}
 
 
 if __name__ == "__main__":

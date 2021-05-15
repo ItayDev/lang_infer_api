@@ -1,6 +1,6 @@
 import ModelLoader
 from data.NewsRequester import NewsRequester
-from data.TweetsRequester import TweetsRequester
+from data.TweetsRequester import TweetsRequester, clean_tweet
 from models.pattern import Parameters, DatasetPrepare, SignificantResultsFilter
 from models.inference.TweetsEvaluator import TweetsEvaluator
 from datetime import datetime
@@ -36,4 +36,5 @@ def evaluate_tweets_with_news(tweets):
 
 
 def retrieve_tweets(person, start_date=None, end_date=None):
-    tweets_requester.fetch_tweets_from_server(person)
+    tweets = tweets_requester.fetch_tweets_from_server(person)
+    return [clean_tweet(tweet.full_text) for tweet in tweets]
