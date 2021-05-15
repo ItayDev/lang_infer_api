@@ -1,13 +1,14 @@
 import requests
 from datetime import datetime
 from pickle import dump, load
+from credentials import NYT_API_KEY
 import pytz
 import os
 
 UTC = pytz.utc
 ARTICLE_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 QUERY_DATE_FORMAT = "%Y-%m-%d"
-API_KEY = "mkmf1ZFfJzxR1gmt2GUW0JppZXKDHg9M"
+API_KEY = NYT_API_KEY
 API_URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?fq="
 NEWS_CACHE_PATH = "news_cache"
 NEWS_CACHE_FILE = "cache.pkl"
