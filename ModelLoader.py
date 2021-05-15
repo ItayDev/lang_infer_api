@@ -17,6 +17,3 @@ def load_pattern_model():
     model = PatternModel().to(Parameters.DEVICE)
     SaveLoad.load_checkpoint(load_path=pattern_model_location, model=model)
     return model
-
-
-

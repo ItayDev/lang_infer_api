@@ -1,5 +1,4 @@
 import torch
-import models.pattern.Parameters
 from models.pattern import Parameters
 
 

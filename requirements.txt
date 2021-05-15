@@ -15,3 +15,6 @@ requests
 # News API
 GoogleNews~=1.5.7
 MyApplication
+
+# Twitter API
+tweepy

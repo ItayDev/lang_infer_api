@@ -1,5 +1,6 @@
 import ModelLoader
 from data.NewsRequester import NewsRequester
+from data.TweetsRequester import TweetsRequester
 from models.pattern import Parameters, DatasetPrepare, SignificantResultsFilter
 from models.inference.TweetsEvaluator import TweetsEvaluator
 from datetime import datetime
@@ -8,6 +9,7 @@ inference_model = ModelLoader.load_inference_model()
 pattern_model = ModelLoader.load_pattern_model()
 news_requester = NewsRequester()
 tweets_evaluator = TweetsEvaluator(inference_model, news_requester)
+tweets_requester = TweetsRequester()
 
 # TODO: This method should get as an input tweets and not the body directly
 # Run the pattern model over the given list of titles,
@@ -33,3 +35,5 @@ def evaluate_tweets_with_news(tweets):
     return tweets_evaluator.eval_tweets(tweets)
 
 
+def retrieve_tweets(person, start_date=None, end_date=None):
+    tweets_requester.fetch_tweets_from_server(person)
