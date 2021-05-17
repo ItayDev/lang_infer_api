@@ -1,5 +1,7 @@
+from datetime import datetime
 from flask import Flask, request
 import API
+from data.TweetsRequester import TWEET_DATE_FORMAT
 
 app = Flask(__name__)
 
@@ -48,7 +50,17 @@ def pattern_model_filter():
 
 @app.route('/tweets/<person>', methods=["GET"])
 def get_tweets(person):
-    return {"tweets": API.retrieve_tweets(person)}
+    try:
+        start_date = datetime.strptime(request.args['start_date'], TWEET_DATE_FORMAT) \
+            if 'start_date' in request.args else None
+
+        end_date = datetime.strptime(request.args['end_date'], TWEET_DATE_FORMAT) \
+            if 'end_date' in request.args else None
+
+    except ValueError as e:
+        return str(e), 400
+
+    return {"tweets": API.retrieve_tweets(person, start_date, end_date)}
 
 
 if __name__ == "__main__":

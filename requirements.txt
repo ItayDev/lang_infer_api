@@ -16,6 +16,9 @@ requests
 GoogleNews~=1.5.7
 MyApplication
 
+# Time
+pytz
+
 # Twitter API
 tweepy
-tweet-preprocessor
+preprocessor

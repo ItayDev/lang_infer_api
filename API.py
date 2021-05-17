@@ -35,6 +35,6 @@ def evaluate_tweets_with_news(tweets):
     return tweets_evaluator.eval_tweets(tweets)
 
 
-def retrieve_tweets(person, start_date=None, end_date=None):
-    tweets = tweets_requester.fetch_tweets_from_server(person)
+def retrieve_tweets(person, start_date: datetime = None, end_date: datetime=None):
+    tweets = tweets_requester.fetch_tweets_from_server(person, start_date, end_date)
     return [clean_tweet(tweet.full_text) for tweet in tweets]

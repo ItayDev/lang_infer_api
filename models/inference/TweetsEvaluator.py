@@ -1,12 +1,10 @@
+from data.TweetsRequester import TWEET_DATE_FORMAT
 from models.inference.predict import LangInferModelWrapper
-
 from datetime import datetime, timedelta
-
 from data.NewsRequester import NewsRequester
 
 ARTICLE_PREFETCH_AMOUNT = 7
-# TODO: find what is the correct tweet date's format
-TWEET_DATE_FORMAT = '%Y-%m-%d'
+
 
 class TweetsEvaluator:
     def __init__(self, model: LangInferModelWrapper, news_requester: NewsRequester):
