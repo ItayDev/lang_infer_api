@@ -11,13 +11,23 @@ ACCESS_TOKEN_SECRET = credentials.TWITTER_ACCESS_TOKEN_SECRET
 # Maximum amounts of tweets returned by twitter server.
 # Amounts of tweets could be even lower than this parameter, due to:
 # twitter send less tweets than max, date filter applied...
-MAX_TWEETS_RETURN = 20
+MAX_TWEETS_RETURN = 50
 
 TWEET_DATE_FORMAT = '%Y-%m-%d'
 
 
 def clean_tweet(tweet_text: str):
     return p.clean(tweet_text)
+
+
+def filter_by_date(tweets, start_date: int = None, end_date: int = None):
+    if start_date is not None:
+        tweets = filter(lambda tweet: tweet.created_at > start_date, tweets)
+
+    if end_date is not None:
+        tweets = filter(lambda tweet: tweet.created_at < end_date, tweets)
+
+    return list(tweets)
 
 
 class TweetsRequester:
@@ -36,13 +46,13 @@ class TweetsRequester:
 
     def fetch_tweets_from_server(self, screen_name: str, start_date: datetime = None, end_date: datetime = None):
         tweets = self.api.user_timeline(screen_name=screen_name, tweet_mode="extended",  count=MAX_TWEETS_RETURN)
-        return self.filter_by_date(tweets, start_date, end_date)
+        filtered_tweets = filter_by_date(tweets, start_date, end_date)
 
-    def filter_by_date(self, tweets, start_date: int = None, end_date: int = None):
-        if start_date is not None:
-            tweets = filter(lambda tweet: tweet.created_at > start_date, tweets)
+        return [Tweet(tweet.full_text, tweet.created_at) for tweet in filtered_tweets]
 
-        if end_date is not None:
-            tweets = filter(lambda tweet: tweet.created_at < end_date, tweets)
 
-        return list(tweets)
+class Tweet:
+    def __init__(self, content, date):
+        self.raw_content = content
+        self.clean_content = clean_tweet(content)
+        self.date = date

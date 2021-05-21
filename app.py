@@ -7,17 +7,20 @@ app = Flask(__name__)
 
 
 # This route returns a score of tweets' reliability for a tweeter account.
-# payload should contain tweeter account name as well as range of tweets (up to two months):
-# {
-#   "accountName": "BlufferDude",
-#   "startDate": "2021-03-12"
-#   "endDate": "2021-03-31"
-# }
-@app.route('/classify', methods=["POST"])
-def run_hypothesis_model():
-    body = request.get_json()
-    tweets = None                           # TODO get the tweets, call API.evaluate_tweets_with_news only after being
-    return API.evaluate_tweets_with_news()  # evaluated by the pattern model and filtered
+# the route argument is the account name and the route parameters are 'startDate' and 'endDate'
+@app.route('/classify/<account_name>', methods=["GET"])
+def run_hypothesis_model(account_name):
+    try:
+        start_date = datetime.strptime(request.args['startDate'], TWEET_DATE_FORMAT) \
+            if 'start_date' in request.args else None
+
+        end_date = datetime.strptime(request.args['endDate'], TWEET_DATE_FORMAT) \
+            if 'end_date' in request.args else None
+
+    except ValueError as e:
+        return str(e), 400
+
+    return API.classify(account_name, start_date, end_date)
 
 
 # This route returns a probability for a given text to be true according to detection of lying patterns.
