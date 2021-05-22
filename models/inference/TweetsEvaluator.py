@@ -1,3 +1,5 @@
+from typing import List
+
 from data.TweetsRequester import Tweet
 from data.TweetsRequester import TWEET_DATE_FORMAT
 from models.inference.predict import LangInferModelWrapper
@@ -12,7 +14,7 @@ class TweetsEvaluator:
         self.inference_model = inference_model
         self.news_requester = news_requester
 
-    def eval_tweets(self, tweets: list[Tweet]):
+    def eval_tweets(self, tweets: List[Tweet]):
         self._prefetch_articles(tweets)
 
         return list(
@@ -47,7 +49,7 @@ class TweetsEvaluator:
 
         return {"tweet": tweet.raw_content, "articles": significant_articles}
 
-    def _prefetch_articles(self, tweets: list[Tweet]):
+    def _prefetch_articles(self, tweets: List[Tweet]):
         dates = [tweet.date for tweet in tweets]
         start_date = min(dates) - timedelta(days=ARTICLE_PREFETCH_AMOUNT)
         end_date = max(dates) + timedelta(days=ARTICLE_PREFETCH_AMOUNT)

@@ -2,6 +2,7 @@ import datetime
 import tweepy
 import credentials
 import preprocessor as p
+from flask.json import JSONEncoder
 
 CONSUMER_KEY = credentials.TWITTER_API_KEY
 CONSUMER_SECRET = credentials.TWITTER_API_SECRET_KEY
@@ -51,8 +52,15 @@ class TweetsRequester:
         return [Tweet(tweet.full_text, tweet.created_at) for tweet in filtered_tweets]
 
 
-class Tweet:
+class Tweet(JSONEncoder):
     def __init__(self, content, date):
         self.raw_content = content
         self.clean_content = clean_tweet(content)
         self.date = date
+
+    def default(self, obj):
+        if isinstance(obj, Tweet):
+            return obj.__dict__
+        return super(JSONEncoder, self).default(obj)
+
+
