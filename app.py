@@ -1,10 +1,11 @@
 from datetime import datetime
 from flask import Flask, request
 import API
+from MyJsonEncoder import MyJsonEncoder
 from data.TweetsRequester import TWEET_DATE_FORMAT
 
 app = Flask(__name__)
-
+app.json_encoder = MyJsonEncoder
 
 # This route returns a score of tweets' reliability for a tweeter account.
 # the route argument is the account name and the route parameters are 'startDate' and 'endDate'
@@ -36,6 +37,21 @@ def run_hypothesis_model(account_name):
 def run_pattern_model():
     body = request.get_json()
     return API.run_pattern_model(body)
+
+
+@app.route('/grade/pattern/<account_name>', methods=["GET"])
+def grade_account_by_pattern_model(account_name: str):
+    try:
+        start_date = datetime.strptime(request.args['startDate'], TWEET_DATE_FORMAT) \
+            if 'start_date' in request.args else None
+
+        end_date = datetime.strptime(request.args['endDate'], TWEET_DATE_FORMAT) \
+            if 'end_date' in request.args else None
+
+    except ValueError as e:
+        return str(e), 400
+
+    return API.pattern_model_grader(account_name, start_date, end_date)
 
 
 # Sample Model for getting prediction from news
