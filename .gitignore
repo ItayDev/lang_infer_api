@@ -1,5 +1,6 @@
 venv
 saved_models
+credentials.py
 .idea
 *.pyc
 *.pt
