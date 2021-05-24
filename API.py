@@ -1,7 +1,8 @@
+from typing import List
 import ModelLoader
 from data.NewsRequester import NewsRequester
 from data.TweetsRequester import TweetsRequester, Tweet
-from models.pattern import Parameters, DatasetPrepare, SignificantResultsFilter
+from models.pattern import Parameters, DatasetPrepare, PatternModelAnalyzer
 from models.inference.TweetsEvaluator import TweetsEvaluator
 from datetime import datetime
 
@@ -21,12 +22,15 @@ def run_pattern_model(texts):
     return {"predictions": prediction_of_true_label}
 
 
-def pattern_model_filter(tweets: list[Tweet]):
+def pattern_model_grader(tweets):
     texts = [tweet.clean_content for tweet in tweets]
     probabilities = run_pattern_model(texts)["predictions"]
+    texts_with_probs = list(zip(tweets, probabilities))
     return {
-        "significant_tweets": SignificantResultsFilter.filter_significant_results(zip(tweets, probabilities)),
-        "pattern_score": sum(probabilities) / len(probabilities)
+        "significant_tweets": [tweet[0]
+                               for tweet
+                               in PatternModelAnalyzer.filter_significant_results(texts_with_probs)],
+        "pattern_score": PatternModelAnalyzer.grade_account(texts_with_probs)
     }
 
 
@@ -35,14 +39,14 @@ def evaluate_tweets_with_news(tweets: list[Tweet]):
     return tweets_evaluator.eval_tweets(tweets)
 
 
-def retrieve_tweets(person, start_date: datetime = None, end_date: datetime=None):
+def retrieve_tweets(person, start_date: datetime = None, end_date: datetime= None):
     return tweets_requester.fetch_tweets_from_server(person, start_date, end_date)
 
 
 def classify(account_name, start_date, end_date):
     tweets = retrieve_tweets(account_name, start_date, end_date)
-    pattern_result = pattern_model_filter(tweets)
-    significant_tweets = [tup[0] for tup in pattern_result["significant_tweets"]]
+    pattern_result = pattern_model_grader(tweets)
+    significant_tweets = pattern_result["significant_tweets"]
     tweets_with_news = evaluate_tweets_with_news(significant_tweets)
 
     return {
