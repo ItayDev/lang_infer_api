@@ -51,7 +51,8 @@ def grade_account_by_pattern_model(account_name: str):
     except ValueError as e:
         return str(e), 400
 
-    return API.pattern_model_grader(account_name, start_date, end_date)
+    tweets = API.retrieve_tweets(account_name, start_date, end_date)
+    return API.pattern_model_grader(tweets)
 
 
 # Sample Model for getting prediction from news

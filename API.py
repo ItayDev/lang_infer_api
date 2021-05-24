@@ -22,8 +22,7 @@ def run_pattern_model(texts):
     return {"predictions": prediction_of_true_label}
 
 
-def pattern_model_grader(account_name, start_date=None, end_date=None):
-    tweets = retrieve_tweets(account_name, start_date, end_date)
+def pattern_model_grader(tweets):
     texts = [tweet.clean_content for tweet in tweets]
     probabilities = run_pattern_model(texts)["predictions"]
     texts_with_probs = list(zip(tweets, probabilities))
