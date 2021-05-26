@@ -12,11 +12,12 @@ app.json_encoder = MyJsonEncoder
 @app.route('/classify/<account_name>', methods=["GET"])
 def run_hypothesis_model(account_name):
     try:
-        start_date = datetime.strptime(request.args['startDate'], TWEET_DATE_FORMAT) \
-            if 'start_date' in request.args else None
+        start_date_parm_name, end_date_parm_name = "start_date", "end_date"
+        start_date = datetime.strptime(request.args[start_date_parm_name], TWEET_DATE_FORMAT) \
+            if start_date_parm_name in request.args else None
 
-        end_date = datetime.strptime(request.args['endDate'], TWEET_DATE_FORMAT) \
-            if 'end_date' in request.args else None
+        end_date = datetime.strptime(request.args[end_date_parm_name], TWEET_DATE_FORMAT) \
+            if end_date_parm_name in request.args else None
 
     except ValueError as e:
         return str(e), 400
@@ -42,11 +43,12 @@ def run_pattern_model():
 @app.route('/grade/pattern/<account_name>', methods=["GET"])
 def grade_account_by_pattern_model(account_name: str):
     try:
-        start_date = datetime.strptime(request.args['startDate'], TWEET_DATE_FORMAT) \
-            if 'start_date' in request.args else None
+        start_date_parm_name, end_date_parm_name = "start_date", "end_date"
+        start_date = datetime.strptime(request.args[start_date_parm_name], TWEET_DATE_FORMAT) \
+            if start_date_parm_name in request.args else None
 
-        end_date = datetime.strptime(request.args['endDate'], TWEET_DATE_FORMAT) \
-            if 'end_date' in request.args else None
+        end_date = datetime.strptime(request.args[end_date_parm_name], TWEET_DATE_FORMAT) \
+            if end_date_parm_name in request.args else None
 
     except ValueError as e:
         return str(e), 400
