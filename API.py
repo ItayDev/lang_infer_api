@@ -35,7 +35,7 @@ def pattern_model_grader(tweets):
 
 
 # Retrieve news from news api
-def evaluate_tweets_with_news(tweets: list[Tweet]):
+def evaluate_tweets_with_news(tweets: List[Tweet]):
     return tweets_evaluator.eval_tweets(tweets)
 
 
