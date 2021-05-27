@@ -45,11 +45,10 @@ class TweetsRequester:
         else:
             print("Error during authentication to twitter server")
 
-    def fetch_tweets_from_server(self, screen_name: str, start_date: datetime = None, end_date: datetime = None):
+    def fetch_tweets_from_server(self, screen_name: str):
         tweets = self.api.user_timeline(screen_name=screen_name, tweet_mode="extended",  count=MAX_TWEETS_RETURN)
-        filtered_tweets = filter_by_date(tweets, start_date, end_date)
 
-        return [Tweet(tweet.full_text, tweet.created_at) for tweet in filtered_tweets]
+        return [Tweet(tweet.full_text, tweet.created_at) for tweet in tweets]
 
 
 class Tweet(JSONEncoder):
