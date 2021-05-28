@@ -40,16 +40,6 @@ def grade_account_by_pattern_model(account_name: str):
 
 @app.route('/tweets/<person>', methods=["GET"])
 def get_tweets(person):
-    try:
-        start_date = datetime.strptime(request.args['start_date'], TWEET_DATE_FORMAT) \
-            if 'start_date' in request.args else None
-
-        end_date = datetime.strptime(request.args['end_date'], TWEET_DATE_FORMAT) \
-            if 'end_date' in request.args else None
-
-    except ValueError as e:
-        return str(e), 400
-
     return {"tweets": config.api.retrieve_tweets(person)}
 
 
