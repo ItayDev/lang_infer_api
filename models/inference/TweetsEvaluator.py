@@ -1,9 +1,8 @@
 from typing import List
 
 from data.TweetsRequester import Tweet
-from data.TweetsRequester import TWEET_DATE_FORMAT
 from models.inference.predict import LangInferModelWrapper
-from datetime import datetime, timedelta
+from datetime import timedelta
 from data.NewsRequester import NewsRequester
 
 ARTICLE_PREFETCH_AMOUNT = 7
@@ -31,9 +30,9 @@ class TweetsEvaluator:
         articles = self.news_requester.request_news(articles_start_date, articles_end_date)
 
         articles_with_scores = list(map(lambda article: {
-            'articles': article,
+            'article': article,
             'score': self.inference_model.predict([{
-                'premise': article['abstract'],
+                'premise': article.text,
                 'hypothesis': tweet.clean_content}])[0]
         }, articles))
 
