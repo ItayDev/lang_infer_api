@@ -1,9 +1,7 @@
-from datetime import datetime
 from flask import Flask, request, config
 from API import API
 from MyJsonEncoder import MyJsonEncoder
-from data.NewsRequester import NewsRequester
-from data.TweetsRequester import TWEET_DATE_FORMAT
+from waitress import serve
 
 app = Flask(__name__)
 app.json_encoder = MyJsonEncoder
@@ -44,4 +42,4 @@ def get_tweets(person):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    serve(host='0.0.0.0', port=5000)
