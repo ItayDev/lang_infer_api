@@ -1,4 +1,4 @@
-MIN_TRUE_THRESHOLD = 0.4
+MIN_TRUE_THRESHOLD = 0.3
 MAX_FALSE_THRESHOLD = 0.15
 
 """
@@ -16,7 +16,7 @@ The default thresholds are configured above.
 def filter_significant_results(results_with_probs,
                                lower_threshold=MIN_TRUE_THRESHOLD,
                                upper_threshold=MAX_FALSE_THRESHOLD):
-    filter_unwanted_items =  \
+    filter_unwanted_items = \
         filter(lambda item: filter_result(item, lower_threshold, upper_threshold), results_with_probs)
 
     return list(filter_unwanted_items)
