@@ -36,7 +36,8 @@ The default probabilities for true or misleading texts are configured above.
     possibly constructed by zip of the texts and probabilities such as:
     (("Trump is lying", 0.9), ("I like pasta", 0.6), ("peace in the middle east", 0.1))
     
-:return a list that has only definite probabilities of either true or false
+:return a number by the range of [-1, 1] to indicate how truthful the account is,
+when -1 means complete liar and 1 means all true. 
 """
 def grade_account(results_with_probs,
                   lower_threshold=MIN_TRUE_THRESHOLD,
@@ -52,6 +53,5 @@ def grade_account(results_with_probs,
     if false_texts_count + true_texts_count == 0:
         return 0
 
-    true_or_false_multiplier = 1 if true_texts_count > false_texts_count else -1
-    absolute_grade = max(true_texts_count, false_texts_count) / (false_texts_count + true_texts_count)
-    return true_or_false_multiplier * absolute_grade
+    true_to_total_ratio = true_texts_count / (false_texts_count + true_texts_count)
+    return 2 * true_to_total_ratio - 1
