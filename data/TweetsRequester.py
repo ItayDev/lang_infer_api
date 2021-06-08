@@ -3,6 +3,8 @@ import tweepy
 import credentials
 import preprocessor as p
 from flask.json import JSONEncoder
+import re
+import emoji
 
 CONSUMER_KEY = credentials.TWITTER_API_KEY
 CONSUMER_SECRET = credentials.TWITTER_API_SECRET_KEY
@@ -12,13 +14,19 @@ ACCESS_TOKEN_SECRET = credentials.TWITTER_ACCESS_TOKEN_SECRET
 # Maximum amounts of tweets returned by twitter server.
 # Amounts of tweets could be even lower than this parameter, due to:
 # twitter send less tweets than max, date filter applied...
-MAX_TWEETS_RETURN = 50
+MAX_TWEETS_RETURN = 15
 
 TWEET_DATE_FORMAT = '%Y-%m-%d'
 
 
 def clean_tweet(tweet_text: str):
-    return p.clean(tweet_text)
+    tweet_text = re.sub("@[A-Za-z0-9]+", "", tweet_text)  # Remove @ sign
+    tweet_text = re.sub(r"(?:\@|http?\://|https?\://|www)\S+", "", tweet_text)  # Remove http links
+    tweet_text = " ".join(tweet_text.split())
+    tweet_text = ''.join(c for c in tweet_text if c not in emoji.UNICODE_EMOJI)  # Remove Emojis
+    tweet_text = tweet_text.replace("#", "").replace("_", " ")  # Remove hashtag sign but keep the text
+
+    return tweet_text
 
 
 def filter_by_date(tweets, start_date: int = None, end_date: int = None):

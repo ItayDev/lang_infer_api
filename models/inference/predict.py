@@ -43,7 +43,6 @@ class LangInferModelWrapper:
 
     def predict(self, batch):
         encoded_data, start_indexes, end_indexes, span_masks = self.__encode_input(batch)
-        # res = self.model(encoded_data, start_indexes, end_indexes, span_masks)
         res = self.model(encoded_data, start_indexes, end_indexes, span_masks)
         return list(map(lambda single_result: calculate_prediction(single_result).item(), res))
 
