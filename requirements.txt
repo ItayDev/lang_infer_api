@@ -21,5 +21,6 @@ pytz
 
 # Twitter API
 tweepy
+emoji
 preprocessor
 tweet-preprocessor

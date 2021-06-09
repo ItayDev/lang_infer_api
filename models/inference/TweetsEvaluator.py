@@ -5,7 +5,7 @@ from models.inference.predict import LangInferModelWrapper
 from datetime import timedelta
 from data.NewsRequester import NewsRequester
 
-ARTICLE_PREFETCH_AMOUNT = 7
+ARTICLE_PREFETCH_AMOUNT = 3.5
 
 
 class TweetsEvaluator:
@@ -24,8 +24,8 @@ class TweetsEvaluator:
         )
 
     def _eval_tweet_with_news(self, tweet: Tweet):
-        articles_start_date = tweet.date - timedelta(days=ARTICLE_PREFETCH_AMOUNT)
-        articles_end_date = tweet.date + timedelta(days=ARTICLE_PREFETCH_AMOUNT)
+        articles_start_date = tweet.date - timedelta(hours=ARTICLE_PREFETCH_AMOUNT)
+        articles_end_date = tweet.date + timedelta(hours=ARTICLE_PREFETCH_AMOUNT)
 
         articles = self.news_requester.request_news(articles_start_date, articles_end_date)
 
@@ -50,7 +50,7 @@ class TweetsEvaluator:
 
     def _prefetch_articles(self, tweets: List[Tweet]):
         dates = [tweet.date for tweet in tweets]
-        start_date = min(dates) - timedelta(days=ARTICLE_PREFETCH_AMOUNT)
-        end_date = max(dates) + timedelta(days=ARTICLE_PREFETCH_AMOUNT)
+        start_date = min(dates) - timedelta(hours=ARTICLE_PREFETCH_AMOUNT)
+        end_date = max(dates) + timedelta(hours=ARTICLE_PREFETCH_AMOUNT)
 
         self.news_requester.prefetch_articles(start_date, end_date)
