@@ -14,7 +14,7 @@ ACCESS_TOKEN_SECRET = credentials.TWITTER_ACCESS_TOKEN_SECRET
 # Maximum amounts of tweets returned by twitter server.
 # Amounts of tweets could be even lower than this parameter, due to:
 # twitter send less tweets than max, date filter applied...
-MAX_TWEETS_RETURN = 15
+MAX_TWEETS_RETURN = 25
 
 TWEET_DATE_FORMAT = '%Y-%m-%d'
 

@@ -23,32 +23,29 @@ REQUESTS_DELAY = 6
 
 def read_all_articles(start_date, end_date, num_of_pages):
     articles = []
-    try:
-        for page in range(0, num_of_pages + 1):
-            time.sleep(REQUESTS_DELAY)
-            url = f'{API_URL}news_desk:("National" "Politics" "Foreign")' \
-                  f'&begin_date={start_date.strftime(QUERY_DATE_FORMAT)}' \
-                  f'&end_date={end_date.strftime(QUERY_DATE_FORMAT)}]' \
-                  f'&api-key={API_KEY}' \
-                  f'&page={page}' \
-                  f'&sort=newest'
-            res = requests.get(url).json()
+    for page in range(0, num_of_pages + 1):
+        time.sleep(REQUESTS_DELAY)
+        url = f'{API_URL}news_desk:("National" "Politics" "Foreign")' \
+              f'&begin_date={start_date.strftime(QUERY_DATE_FORMAT)}' \
+              f'&end_date={end_date.strftime(QUERY_DATE_FORMAT)}]' \
+              f'&api-key={API_KEY}' \
+              f'&page={page}' \
+              f'&sort=newest'
+        res = requests.get(url).json()
 
-            articles += list(
-                map(
-                    lambda article: Article(
-                        datetime.strptime(article['pub_date'], ARTICLE_DATE_FORMAT).replace(tzinfo=None),
-                        article['headline']['main'],
-                        article['abstract'],
-                        article['web_url']
-                    ),
-                    res["response"]["docs"]
-                )
+        articles += list(
+            map(
+                lambda article: Article(
+                    datetime.strptime(article['pub_date'], ARTICLE_DATE_FORMAT).replace(tzinfo=None),
+                    article['headline']['main'],
+                    article['abstract'],
+                    article['web_url']
+                ),
+                res["response"]["docs"]
             )
-    except:
-        print("Couldn't fetch all the articles")
-    finally:
-        return articles
+        )
+    print("Couldn't fetch all the articles")
+    return articles
 
 
 class NewsRequester:
@@ -91,6 +88,8 @@ class NewsRequester:
             self.__request_nyt_api(start_date, self.start_date)
 
     def __request_nyt_api(self, start_date, end_date):
+        prev_start_date = self.start_date
+        prev_end_date = self.end_date
         self.start_date = min(self.start_date, start_date)
         self.end_date = max(self.end_date, end_date)
 
@@ -98,18 +97,23 @@ class NewsRequester:
               f'&begin_date={start_date.strftime(QUERY_DATE_FORMAT)}' \
               f'&end_date={end_date.strftime(QUERY_DATE_FORMAT)}]' \
               f'&api-key={API_KEY}'
-        res = requests.get(url).json()
-        hits = res['response']['meta']['hits']
-        number_of_pages = min(int(hits / DOCS_PER_PAGE), MAX_NUM_OF_PAGES)
-        all_articles = read_all_articles(start_date, end_date, number_of_pages)
-        oldest_article_date = min([article.publish_date for article in all_articles])
+        try:
+            res = requests.get(url).json()
+            hits = res['response']['meta']['hits']
+            number_of_pages = min(int(hits / DOCS_PER_PAGE), MAX_NUM_OF_PAGES)
+            all_articles = read_all_articles(start_date, end_date, number_of_pages)
+            oldest_article_date = min([article.publish_date for article in all_articles])
 
-        # In case not all articles were actually fetched
-        if oldest_article_date > self.start_date:
-            self.start_date = oldest_article_date
+            # In case not all articles were actually fetched
+            if oldest_article_date > self.start_date:
+                self.start_date = oldest_article_date
 
-        self.articles += all_articles
-        self._cache_results()
+            self.articles += all_articles
+            self._cache_results()
+        except:
+            print("Couldn't fetch news")
+            self.start_date = prev_start_date
+            self.end_date = prev_end_date
 
     def _cache_results(self):
         cache_dir_path = os.path.join(app.instance_path, NEWS_CACHE_PATH)
